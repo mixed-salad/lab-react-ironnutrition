@@ -1,9 +1,24 @@
 import React from "react";
 
 class MealBox extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+  state = {
+    quantity: 1,
+  };
+
+  handleQuantityChange = (event) => {
+    const value = event.target.valueAsNumber;
+    this.setState({
+      quantity: value,
+    });
+  };
+
+  handleFormSubmission = (event) => {
+    event.preventDefault();
+    const { quantity } = this.state;
+    const { meal } = this.props;
+    this.props.onAddToTodaysMeals(this.props.meal, quantity);
+  };
+
   render() {
     const meal = this.props.meal;
     return (
@@ -18,11 +33,15 @@ class MealBox extends React.Component {
           <h5 className="mt-0 mb-1">{meal.name}</h5>
           <small>{meal.calories} cals</small>
         </div>
-        <form className="row align-self-center">
+        <form
+          onSubmit={this.handleFormSubmission}
+          className="row align-self-center"
+        >
           <input
             className="form-control col-9"
             type="number"
-            value={meal.quantity || 1}
+            value={this.state.quantity}
+            onChange={this.handleQuantityChange}
           />
           <button className="btn btn-primary col-3">+</button>
         </form>
