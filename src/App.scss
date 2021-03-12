@@ -6,3 +6,19 @@
   display: flex;
   flex-direction: column;
 }
+
+.body-content {
+  display: flex;
+  align-items: flex-start;
+}
+
+.todaysMeal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 1em;
+}
+
+.todaysMeal-content ul {
+  list-style: none;
+}

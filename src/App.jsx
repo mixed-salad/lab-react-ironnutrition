@@ -35,9 +35,26 @@ class App extends Component {
   };
 
   handleTodaysMealsAddition = (meal, quantity) => {
-    this.setState({
-      todaysMeals: [...this.state.todaysMeals, { ...meal, quantity }],
-    });
+    const { todaysMeals } = this.state;
+    const existingMealInList = todaysMeals.find(
+      (todaysMeal) => todaysMeal.name === meal.name
+    );
+    if (existingMealInList) {
+      const replacerMeal = {
+        ...meal,
+        quantity: quantity + existingMealInList.quantity,
+      };
+      const cloneTodaysMeals = [...todaysMeals];
+      const indexOfExistingMeal = todaysMeals.indexOf(existingMealInList);
+      cloneTodaysMeals.splice(indexOfExistingMeal, 1, replacerMeal);
+      this.setState({
+        todaysMeals: cloneTodaysMeals,
+      });
+    } else {
+      this.setState({
+        todaysMeals: [...this.state.todaysMeals, { ...meal, quantity }],
+      });
+    }
   };
 
   render() {
@@ -58,18 +75,21 @@ class App extends Component {
           query={this.state.searchQuery}
           onQueryChange={this.handleQueryChange}
         />
-
-        {(this.state.isFormVisible && <Form onAddMeal={this.addMeal} />) || (
-          <button onClick={this.addNewMealForm}>Add new meal</button>
-        )}
-        {filteredMeals.map((meal) => (
-          <MealBox
-            key={meal.name}
-            meal={meal}
-            onAddToTodaysMeals={this.handleTodaysMealsAddition}
-          />
-        ))}
-        <TodaysMealsList meals={this.state.todaysMeals} />
+        <div className="body-content">
+          <div>
+            {(this.state.isFormVisible && (
+              <Form onAddMeal={this.addMeal} />
+            )) || <button onClick={this.addNewMealForm}>Add new meal</button>}
+            {filteredMeals.map((meal) => (
+              <MealBox
+                key={meal.name}
+                meal={meal}
+                onAddToTodaysMeals={this.handleTodaysMealsAddition}
+              />
+            ))}
+          </div>
+          <TodaysMealsList meals={this.state.todaysMeals} />
+        </div>
       </div>
     );
   }

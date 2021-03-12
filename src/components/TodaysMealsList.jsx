@@ -3,11 +3,15 @@ import React from "react";
 const TodaysMealsList = (props) => {
   const { meals } = props;
 
-  let totalCalories = 0;
-  meals.map((meal) => (totalCalories += meal.calories));
+  // let totalCalories = 0;
+  // meals.map((meal) => (totalCalories += meal.calories));
 
+  const total = meals.reduce(
+    (sum, meal) => sum + meal.calories * meal.quantity,
+    0
+  );
   return (
-    <div>
+    <div className="todaysMeal-content">
       <ul>
         {meals.map((meal) => {
           return (
@@ -18,7 +22,7 @@ const TodaysMealsList = (props) => {
           );
         })}
       </ul>
-      <p>Total calories: {totalCalories}</p>
+      <p>Total calories: {total}</p>
     </div>
   );
 };
